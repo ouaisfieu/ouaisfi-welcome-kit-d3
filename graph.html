@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graph View – ouaisfi.eu</title>
+  <script src="https://unpkg.com/cytoscape@3.19.1/dist/cytoscape.min.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #101010; color: #eee; margin: 0; }
+    #cy { width: 100vw; height: 100vh; display: block; }
+  </style>
+</head>
+<body>
+  <div id="cy"></div>
+  <script>
+    fetch('graph.json')
+      .then(response => response.json())
+      .then(data => {
+        cytoscape({
+          container: document.getElementById('cy'),
+          elements: {
+            nodes: data.nodes,
+            edges: data.edges
+          },
+          style: [
+            { selector: 'node', style: { 'background-color': '#00ff88', 'label': 'data(label)', 'color': '#fff', 'font-size': '12px' }},
+            { selector: 'edge', style: { 'width': 2, 'line-color': '#888' }}
+          ],
+          layout: { name: 'cose' }
+        });
+      });
+  </script>
+</body>
+</html>

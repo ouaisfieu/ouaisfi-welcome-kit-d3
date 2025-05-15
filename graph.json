@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    { "data": { "id": "hub1", "label": "Citoyenneté & Engagement" } },
+    { "data": { "id": "kit1", "label": "Kit Émotions" } },
+    { "data": { "id": "arcane1", "label": "Le Bateleur" } }
+  ],
+  "edges": [
+    { "data": { "source": "hub1", "target": "kit1" } },
+    { "data": { "source": "hub1", "target": "arcane1" } }
+  ]
+}

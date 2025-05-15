@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Graph View – ouaisfi.eu (D3.js)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { margin: 0; background: #101010; color: #eee; font-family: sans-serif; }
+    svg { width: 100vw; height: 100vh; }
+    text { fill: #ccc; font-size: 12px; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <svg></svg>
+  <script>
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    const svg = d3.select("svg");
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    d3.json("graph.json").then(graph => {
+      const simulation = d3.forceSimulation(graph.nodes)
+        .force("link", d3.forceLink(graph.edges).id(d => d.id).distance(100))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+      const link = svg.append("g")
+        .attr("stroke", "#888")
+        .selectAll("line")
+        .data(graph.edges)
+        .join("line")
+        .attr("stroke-width", 2);
+
+      const node = svg.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+        .selectAll("circle")
+        .data(graph.nodes)
+        .join("circle")
+        .attr("r", 10)
+        .attr("fill", d => color(d.label));
+
+      const label = svg.append("g")
+        .selectAll("text")
+        .data(graph.nodes)
+        .join("text")
+        .text(d => d.label)
+        .attr("x", 12)
+        .attr("y", 4);
+
+      simulation.on("tick", () => {
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+
+        label
+          .attr("x", d => d.x + 12)
+          .attr("y", d => d.y + 4);
+      });
+    });
+  </script>
+</body>
+</html>
